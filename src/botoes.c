@@ -1,6 +1,6 @@
-#include "bibliotecas/botoes.h"
-#include "bibliotecas/led_rgb.h"
-#include "bibliotecas/ssd1306.h"
+#include "../includes/botoes.h"
+#include "../includes/led_rgb.h"
+#include "../includes/ssd1306.h"
 #include <stdio.h>
 
 // Estados dos LEDs
@@ -21,19 +21,35 @@ void configurar_botoes(void) {
     gpio_set_irq_enabled_with_callback(BOTAO_B, GPIO_IRQ_EDGE_FALL, true, &tratar_interrupcao_botao);
 }
 
+// Função de debounce
+bool debounce(uint32_t agora) {
+    if (agora - ultimo_tempo_press < 200000) {
+        return false;
+    }
+    ultimo_tempo_press = agora;
+    return true;
+}
+
+// Atualiza o display OLED com o estado dos LEDs
+void atualiza_display_oled(ssd1306_t* ssd, const char* linha1, const char* linha2) {
+    ssd1306_fill(ssd, false);
+    ssd1306_rect(ssd, 3, 3, 122, 58, true, false);
+    ssd1306_draw_string(ssd, linha1, 15, 10);
+    ssd1306_draw_string(ssd, linha2, 30, 30);
+    ssd1306_send_data(ssd);
+}
+
 // Função de interrupção dos botões
 void tratar_interrupcao_botao(uint gpio, uint32_t eventos) {
     extern ssd1306_t ssd; // Permite acesso ao display global
+
     uint32_t agora = time_us_32();
-    
-    if (agora - ultimo_tempo_press < 200000) return; // Debounce (200ms)
-    ultimo_tempo_press = agora;
+    if (!debounce(agora)) return;
 
     if (gpio == BOTAO_A) { // Se pressionou o botão A
         estado_led_verde = !estado_led_verde;
         if (estado_led_verde) estado_led_azul = false;
-    } 
-    else if (gpio == BOTAO_B) { // Se pressionou o botão B
+    } else if (gpio == BOTAO_B) { // Se pressionou o botão B
         estado_led_azul = !estado_led_azul;
         if (estado_led_azul) estado_led_verde = false;
     }
@@ -49,19 +65,11 @@ void tratar_interrupcao_botao(uint gpio, uint32_t eventos) {
     );
 
     // Atualiza o display OLED
-    ssd1306_fill(&ssd, false);
-    ssd1306_rect(&ssd, 3, 3, 122, 58, true, false);
-    
     if (estado_led_verde) {
-        ssd1306_draw_string(&ssd, "LED Verde", 15, 10);
-        ssd1306_draw_string(&ssd, "LIGADO", 30, 30);
+        atualiza_display_oled(&ssd, "LED Verde", "LIGADO");
     } else if (estado_led_azul) {
-        ssd1306_draw_string(&ssd, "LED Azul", 15, 10);
-        ssd1306_draw_string(&ssd, "LIGADO", 30, 30);
+        atualiza_display_oled(&ssd, "LED Azul", "LIGADO");
     } else {
-        ssd1306_draw_string(&ssd, "Todos LEDs", 15, 10);
-        ssd1306_draw_string(&ssd, "DESLIGADOS", 30, 30);
+        atualiza_display_oled(&ssd, "Todos LEDs", "DESLIGADOS");
     }
-    
-    ssd1306_send_data(&ssd);
 }

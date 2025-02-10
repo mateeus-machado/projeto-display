@@ -1,5 +1,5 @@
-#ifndef BOTOES_H
-#define BOTOES_H
+#ifndef BOTAO_H
+#define BOTAO_H
 
 #include "pico/stdlib.h"
 
@@ -11,4 +11,4 @@
 void configurar_botoes(void);
 void tratar_interrupcao_botao(uint gpio, uint32_t eventos);
 
-#endif // BOTOES_H
+#endif // BOTAO_H

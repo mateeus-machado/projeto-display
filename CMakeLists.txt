@@ -37,11 +37,11 @@ pico_sdk_init()
 
 add_executable(projeto-display
         projeto-display.c
-        matriz_led.c
-        led_rgb.c
-        botoes.c
-        animacao.c
-        ssd1306.c
+        src/matriz_led.c
+        src/led_rgb.c
+        src/botoes.c
+        src/animacao.c
+        src/ssd1306.c
 )
 
 pico_set_program_name(projeto-display "projeto-display")
@@ -51,7 +51,7 @@ pico_set_program_version(projeto-display "0.1")
 pico_enable_stdio_uart(projeto-display 1)
 pico_enable_stdio_usb(projeto-display 1)
 
-pico_generate_pio_header(projeto-display ${CMAKE_CURRENT_LIST_DIR}/projeto-display.pio)
+pico_generate_pio_header(projeto-display ${CMAKE_CURRENT_LIST_DIR}/projeto_display.pio)
 
 # Add the standard library to the build
 target_link_libraries(projeto-display
@@ -69,3 +69,4 @@ target_include_directories(projeto-display PRIVATE
 )
 
 pico_add_extra_outputs(projeto-display)
+

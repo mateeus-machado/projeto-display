@@ -1,5 +1,5 @@
-#include "bibliotecas/animacao.h"
-#include "bibliotecas/matriz_led.h"
+#include "../includes/animacao.h"
+#include "../includes/matriz_led.h"
 
 // Definição dos números na matriz 5x5
 const int MATRIZ_NUMEROS[10][25] = {
