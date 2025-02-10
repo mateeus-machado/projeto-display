@@ -35,7 +35,14 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(projeto-display projeto-display.c )
+add_executable(projeto-display
+        projeto-display.c
+        matriz_led.c
+        led_rgb.c
+        botoes.c
+        animacao.c
+        ssd1306.c
+)
 
 pico_set_program_name(projeto-display "projeto-display")
 pico_set_program_version(projeto-display "0.1")
@@ -44,19 +51,21 @@ pico_set_program_version(projeto-display "0.1")
 pico_enable_stdio_uart(projeto-display 1)
 pico_enable_stdio_usb(projeto-display 1)
 
+pico_generate_pio_header(projeto-display ${CMAKE_CURRENT_LIST_DIR}/projeto-display.pio)
+
 # Add the standard library to the build
 target_link_libraries(projeto-display
-        pico_stdlib)
+        pico_stdlib
+        hardware_pio
+        hardware_adc
+        pico_bootrom
+        hardware_spi
+        hardware_i2c
+        )
 
 # Add the standard include files to the build
 target_include_directories(projeto-display PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
 )
 
-# Add any user requested libraries
-target_link_libraries(projeto-display 
-        
-        )
-
 pico_add_extra_outputs(projeto-display)
-

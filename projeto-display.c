@@ -11,7 +11,7 @@
 #include "bibliotecas/animacao.h"
 #include "bibliotecas/led_rgb.h"
 #include "bibliotecas/botoes.h"
-#include "projeto-display.h"
+#include "projeto-display.pio.h"
 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
