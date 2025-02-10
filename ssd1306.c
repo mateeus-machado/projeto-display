@@ -1,5 +1,5 @@
-#include "../includes/ssd1306.h"
-#include "../includes/font.h"
+#include "bibliotecas/ssd1306.h"
+#include "bibliotecas/fonte.h"
 #include "hardware/i2c.h"
 
 void ssd1306_init(ssd1306_t *ssd, uint8_t width, uint8_t height, bool external_vcc, uint8_t address, i2c_inst_t *i2c) {
